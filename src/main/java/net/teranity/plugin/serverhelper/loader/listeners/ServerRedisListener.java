@@ -2,6 +2,7 @@ package net.teranity.plugin.serverhelper.loader.listeners;
 
 import cz.foresttech.forestredis.spigot.events.RedisMessageReceivedEvent;
 import net.teranity.plugin.serverhelper.ServerHelper;
+import net.teranity.plugin.serverhelper.event.ServerLoadEvent;
 import net.teranity.plugin.serverhelper.loader.ServerReceived;
 import net.teranity.plugin.serverhelper.loader.ServerRequest;
 import org.bukkit.event.EventHandler;
@@ -29,6 +30,8 @@ public class ServerRedisListener implements Listener {
 
                 serverHelper.getServers().add(serverName);
                 serverHelper.getLogger().info("Server: " + serverName + " is loaded.");
+
+                serverHelper.getServer().getPluginManager().callEvent(new ServerLoadEvent(serverName));
 
                 serverHelper.getRedisManager().publishObject("srns", new ServerReceived(serverName, serverHelper.getRedisManager().getServerIdentifier()));
             }
