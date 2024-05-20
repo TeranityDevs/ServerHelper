@@ -19,6 +19,7 @@ public final class ServerHelper extends JavaPlugin {
     }
 
     private RedisManager redisManager;
+    private String currentServer;
     private List<String> servers = new ArrayList<>();
 
     @Override
@@ -35,10 +36,12 @@ public final class ServerHelper extends JavaPlugin {
         String[] channels = {"slr", "srns"};
         redisManager.subscribe(channels);
 
+        currentServer = redisManager.getServerIdentifier();
+
         getServer().getPluginManager().registerEvents(new ServerRedisListener(), this);
 
         getLogger().info("Loading for servers name...");
-        servers.add(redisManager.getServerIdentifier());
+        servers.add(currentServer);
         redisManager.publishObject(channels[0], new ServerRequest(redisManager.getServerIdentifier()));
 
         for (String server : servers) {
@@ -55,6 +58,10 @@ public final class ServerHelper extends JavaPlugin {
 
     public RedisManager getRedisManager() {
         return redisManager;
+    }
+
+    public String getCurrentServer() {
+        return currentServer;
     }
 
     public List<String> getServers() {
