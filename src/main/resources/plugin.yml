@@ -1,0 +1,8 @@
+name: ServerHelper
+version: '${project.version}'
+main: net.teranity.plugin.serverhelper.ServerHelper
+api-version: '1.20'
+authors: [TeranityDevTeam]
+
+depend:
+  - ForestRedisAPI
