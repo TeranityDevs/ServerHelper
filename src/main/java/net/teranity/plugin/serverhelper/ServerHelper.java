@@ -26,7 +26,16 @@ public final class ServerHelper extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+        load();
+        new ServerListCommand();
+    }
 
+    @Override
+    public void onDisable() {
+        redisManager.close();
+    }
+
+    private void load() {
         redisManager = RedisManager.getAPI();
         if (redisManager == null) {
             getServer().shutdown();
@@ -47,14 +56,10 @@ public final class ServerHelper extends JavaPlugin {
             redisManager.publishObject("srns", new ServerReceived(server, redisManager.getServerIdentifier()));
         }
 
-        new ServerListCommand();
-
-        HelperAPI.init(redisManager, servers, currentServer);
-    }
-
-    @Override
-    public void onDisable() {
-        redisManager.close();
+        // Init API
+        if (HelperAPI.getAPI() == null) {
+            HelperAPI.init(redisManager, servers, currentServer);
+        }
     }
 
     public RedisManager getRedisManager() {
