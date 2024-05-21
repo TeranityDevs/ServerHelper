@@ -20,13 +20,15 @@ public final class ServerHelper extends JavaPlugin {
 
     private RedisManager redisManager;
     private String currentServer;
-    private List<String> servers = new ArrayList<>();
+    private List<String> servers;
 
     @Override
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+
         load();
+
         new ServerListCommand();
     }
 
@@ -41,11 +43,17 @@ public final class ServerHelper extends JavaPlugin {
             getServer().shutdown();
         }
 
+        servers = new ArrayList<>();
+        currentServer = redisManager.getServerIdentifier();
+
+        // Init API
+        if (HelperAPI.getAPI() == null) {
+            HelperAPI.init(redisManager, servers, currentServer);
+        }
+
         // slr = Server Load Request, srns = Server Received Name Server
         String[] channels = {"slr", "srns"};
         redisManager.subscribe(channels);
-
-        currentServer = redisManager.getServerIdentifier();
 
         getServer().getPluginManager().registerEvents(new ServerRedisListener(), this);
 
@@ -54,11 +62,6 @@ public final class ServerHelper extends JavaPlugin {
 
         for (String server : servers) {
             redisManager.publishObject("srns", new ServerReceived(server, redisManager.getServerIdentifier()));
-        }
-
-        // Init API
-        if (HelperAPI.getAPI() == null) {
-            HelperAPI.init(redisManager, servers, currentServer);
         }
     }
 
