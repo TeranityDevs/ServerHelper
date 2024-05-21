@@ -40,7 +40,6 @@ public final class ServerHelper extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ServerRedisListener(), this);
 
-        getLogger().info("Loading for servers name...");
         servers.add(currentServer);
         redisManager.publishObject(channels[0], new ServerRequest(redisManager.getServerIdentifier()));
 
@@ -49,6 +48,8 @@ public final class ServerHelper extends JavaPlugin {
         }
 
         new ServerListCommand();
+
+        HelperAPI.init(redisManager, servers, currentServer);
     }
 
     @Override

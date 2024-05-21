@@ -1,6 +1,7 @@
 net\teranity\plugin\serverhelper\loader\ServerRequest.class
 net\teranity\plugin\serverhelper\commands\ServerListCommand.class
 net\teranity\plugin\serverhelper\util\ChatUtil.class
+net\teranity\plugin\serverhelper\event\ServerLoadEvent.class
 net\teranity\plugin\serverhelper\server\SimpleServer.class
 net\teranity\plugin\serverhelper\server\SimpleServerUser.class
 net\teranity\plugin\serverhelper\loader\listeners\ServerRedisListener.class
